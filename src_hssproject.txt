@@ -1,0 +1,6 @@
+"C:\\Users\\Lucas O'Sullivan\\Desktop\\College Work\\I.T. Tralee - Object Oriented Programming\\Mini-Project\\old.hardwaresuppliersystem\\Customer.java"
+"C:\\Users\\Lucas O'Sullivan\\Desktop\\College Work\\I.T. Tralee - Object Oriented Programming\\Mini-Project\\old.hardwaresuppliersystem\\HardwareSupplierSystemGUI.java"
+"C:\\Users\\Lucas O'Sullivan\\Desktop\\College Work\\I.T. Tralee - Object Oriented Programming\\Mini-Project\\old.hardwaresuppliersystem\\Stock.java"
+"C:\\Users\\Lucas O'Sullivan\\Desktop\\College Work\\I.T. Tralee - Object Oriented Programming\\Mini-Project\\old.hardwaresuppliersystem\\.idea\\Customer.java"
+"C:\\Users\\Lucas O'Sullivan\\Desktop\\College Work\\I.T. Tralee - Object Oriented Programming\\Mini-Project\\old.hardwaresuppliersystem\\.idea\\HardwareSupplierSystemGUI.java"
+"C:\\Users\\Lucas O'Sullivan\\Desktop\\College Work\\I.T. Tralee - Object Oriented Programming\\Mini-Project\\old.hardwaresuppliersystem\\.idea\\Stock.java"
