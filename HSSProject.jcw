@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<workspace>
+	<settings>
+		<label>HSSProject</label>
+	</settings>
+	<users>
+		<user>
+			<path>HSSProject.jcu</path>
+		</user>
+	</users>
+	<projects>
+		<project>
+			<path>HSSProject.jcp</path>
+		</project>
+	</projects>
+</workspace>
