@@ -107,19 +107,20 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
         }
     }
     */
-
+    String username = "";
+    String password = "";
+    boolean logged_in = false;
     public void actionPerformed(ActionEvent e) {
+        /*
         FileInputStream inUserStream = new FileInputStream(inUserFile);
-        FileOutputStream outUserStream = new FileOutputStream(outUserFile);
+        FileInputStream outUserStream = new FileInputStream(outUserFile);
         FileInputStream inPassStream = new FileInputStream(inPassFile);
-        FileOutputStream outPassStream = new FileOutputStream(outPassFile);
+        FileInputStream outPassStream = new FileInputStream(outPassFile);
+        */
 
         int choice;
-        String username = "";
-        String password = "";
-        boolean logged_in = false;
-        String username_guess = "";
-        String password_guess = "";
+        String username_guess = ("i" + username);
+        String password_guess = ("i" + password);
 
         if (e.getActionCommand().equals("New")) {
             if (logged_in == true) {
@@ -167,8 +168,6 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                     }
                 }
             }
-
-
         } else if (e.getActionCommand().equals("Add Item")) {
             if (logged_in == true) {
 
@@ -422,21 +421,21 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                     "Viewing Stock", JOptionPane.INFORMATION_MESSAGE);
         } else if (e.getActionCommand().equals("Login")) {
             if (logged_in == false) {
-                username_guess = ("i" + username);
-                password_guess = ("i" + password);
-                while ((username_guess != username) || (password_guess != password)) {
+                while ((!username_guess.equals(username) || (!password_guess.equals(password)))) {
                     username_guess = JOptionPane.showInputDialog("Enter the correct username.");
-                    while (username_guess != username) {
+                    while (!username_guess.equals(username)) {
                         JOptionPane.showMessageDialog(null, "Incorrect username entered.", "Invalid Username", JOptionPane.ERROR_MESSAGE);
                         username_guess = JOptionPane.showInputDialog("Enter the correct username.");
                     }
                     password_guess = JOptionPane.showInputDialog("Enter the correct password.");
-                    while (password_guess != password){
+                    while (!password_guess.equals(password)){
                         JOptionPane.showMessageDialog(null, "Incorrect password entered.", "Invalid Password", JOptionPane.ERROR_MESSAGE);
                         password_guess = JOptionPane.showInputDialog("Enter the correct password.");
                     }
                 }
+                logged_in = true;
                 JOptionPane.showMessageDialog(null,"You have logged in.","Login Success", JOptionPane.INFORMATION_MESSAGE);
+
             } else {
                 JOptionPane.showMessageDialog(null, "You are already logged in.", "Logged In", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -456,9 +455,9 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             }
         } else if (e.getActionCommand().equals("Change Username")) {
             password_guess = ("i" + password);
-            while (password_guess != password) {
+            while (!password_guess.equals(password)) {
                 password_guess = JOptionPane.showInputDialog("Enter the current password.");
-                if (password_guess != password) {
+                if (!password_guess.equals(password)) {
                     JOptionPane.showMessageDialog(null, "Incorrect password entered.", "Invalid Password", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -466,9 +465,9 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
 
         } else if (e.getActionCommand().equals("Change Password")) {
             password_guess = ("i" + password);
-            while (password_guess != password) {
+            while (!password_guess.equals(password)) {
                 password_guess = JOptionPane.showInputDialog("Enter the current password.");
-                if (password_guess != password) {
+                if (!password_guess.equals(password)) {
                     JOptionPane.showMessageDialog(null, "Incorrect password entered.", "Invalid Password", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -476,7 +475,6 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
         }
 
     }
-
         public void createFile () {
 
             if (!file.exists())
