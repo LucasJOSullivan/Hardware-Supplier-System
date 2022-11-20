@@ -17,6 +17,10 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
     public ArrayList<Stock> allStock = new ArrayList<Stock>();
     /*private static File file = new File("Mini-Project/hardwaresuppliersystem/stock.data");*/
     private static File file = new File("./stock.data");
+    File inUserFile = new File ("./Username.txt");
+    File outUserFile = new File ("./Username.txt");
+    File inPassFile = new File ("./Password.txt");
+    File outPassFile = new File ("./Password.txt");
 
     public HardwareSupplierSystemGUI() {
         super("Hardware Supplier System");
@@ -105,10 +109,10 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
     */
 
     public void actionPerformed(ActionEvent e) {
-        File inUserFile = new File ("Username.txt");
         FileInputStream inUserStream = new FileInputStream(inUserFile);
-
-
+        FileInputStream outUserStream = new FileInputStream(outUserFile);
+        FileInputStream inPassStream = new FileInputStream(inPassFile);
+        FileInputStream outPassStream = new FileInputStream(outPassFile);
 
         int choice;
         String username = "";
@@ -116,8 +120,6 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
         boolean logged_in = false;
         String username_guess = "";
         String password_guess = "";
-
-
 
         if (e.getActionCommand().equals("New")) {
             if (logged_in == true) {
@@ -139,23 +141,30 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             int quit_choice = -1;
             int save_choice = -1;
             while (quit_choice != JOptionPane.NO_OPTION) {
-                quit_choice = JOptionPane.showConfirmDialog(null, "Do you wish to quit the application?",
-                        "Exiting Application", JOptionPane.YES_NO_OPTION);
-                if (quit_choice == JOptionPane.YES_OPTION) {
-                    save_choice = -1;
-                    while (save_choice != JOptionPane.CANCEL_OPTION) {
-                        save_choice = JOptionPane.showConfirmDialog(null, "Do you wish to save the stock data before quitting the application?",
-                                "Exiting Application", JOptionPane.YES_NO_CANCEL_OPTION);
-                        if (save_choice == JOptionPane.YES_OPTION) {
-                            JOptionPane.showMessageDialog(null, "Saving stock data before terminating",
-                                    "Saving File", JOptionPane.INFORMATION_MESSAGE);
-                            saveFile();
-                            System.exit(0);
-                        } else if (save_choice == JOptionPane.NO_OPTION) {
-                            System.exit(0);
+                if (logged_in == true) {
+                    quit_choice = JOptionPane.showConfirmDialog(null, "Do you wish to exit the application?",
+                            "Exit Application?", JOptionPane.YES_NO_OPTION);
+                    if (quit_choice == JOptionPane.YES_OPTION) {
+                        save_choice = -1;
+                        while ((save_choice != JOptionPane.CANCEL_OPTION)) {
+                            save_choice = JOptionPane.showConfirmDialog(null, "Do you wish to save the stock data before exiting the application?",
+                                    "Exiting Application", JOptionPane.YES_NO_CANCEL_OPTION);
+                            if (save_choice == JOptionPane.YES_OPTION) {
+                                JOptionPane.showMessageDialog(null, "Saving stock data before terminating",
+                                        "Saving File", JOptionPane.INFORMATION_MESSAGE);
+                                saveFile();
+                                System.exit(0);
+                            } else if (save_choice == JOptionPane.NO_OPTION) {
+                                System.exit(0);
+                            }
                         }
                     }
-
+                } else {
+                    quit_choice = JOptionPane.showConfirmDialog(null, "Do you wish to exit the application? Note that as you are logged out, you may not save data on exit.",
+                            "Exit Application (Logged Out)?", JOptionPane.YES_NO_OPTION);
+                    if (quit_choice == JOptionPane.YES_OPTION){
+                        JOptionPane.showMessageDialog(null,"Exiting application without saving.","Exiting Application",JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
             }
 
