@@ -110,9 +110,9 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
 
     public void actionPerformed(ActionEvent e) {
         FileInputStream inUserStream = new FileInputStream(inUserFile);
-        FileInputStream outUserStream = new FileInputStream(outUserFile);
+        FileOutputStream outUserStream = new FileOutputStream(outUserFile);
         FileInputStream inPassStream = new FileInputStream(inPassFile);
-        FileInputStream outPassStream = new FileInputStream(outPassFile);
+        FileOutputStream outPassStream = new FileOutputStream(outPassFile);
 
         int choice;
         String username = "";
