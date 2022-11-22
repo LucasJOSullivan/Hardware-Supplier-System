@@ -518,7 +518,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                     byte[] userRead = new byte[characters];
                     inUserStream.read(userRead);
                     for (int i = 0; i < characters; i++) {
-                        username_external += userRead[i] + "";
+                        username_external += userRead[i];
                     }
                     username = username_external;
                     inUserStream.close();
@@ -559,7 +559,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                     byte[] passRead = new byte[characters];
                     inPassStream.read(passRead);
                     for (int i = 0; i < characters; i++) {
-                        username_external += passRead[i] + "";
+                        username_external += passRead[i];
                     }
                     inPassStream.close();
 
