@@ -17,10 +17,14 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
     public ArrayList<Stock> allStock = new ArrayList<Stock>();
     /*private static File file = new File("Mini-Project/hardwaresuppliersystem/stock.data");*/
     private static File file = new File("./stock.data");
+    /*
     File inUserFile = new File ("./Username.txt");
     File outUserFile = new File ("./Username.txt");
     File inPassFile = new File ("./Password.txt");
     File outPassFile = new File ("./Password.txt");
+    */
+    File userFile = new File ("./Username.txt");
+    File passFile = new File ("./Password.txt");
 
     public HardwareSupplierSystemGUI() {
         super("Hardware Supplier System");
@@ -107,20 +111,17 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
         }
     }
     */
-    String username = "";
-    String password = "";
+    String  username = "",
+            password = "",
+            username_external,
+            password_external;
     boolean logged_in = false;
     public void actionPerformed(ActionEvent e) {
-        /*
-        FileInputStream inUserStream = new FileInputStream(inUserFile);
-        FileInputStream outUserStream = new FileInputStream(outUserFile);
-        FileInputStream inPassStream = new FileInputStream(inPassFile);
-        FileInputStream outPassStream = new FileInputStream(outPassFile);
-        */
-
         int choice;
-        String username_guess = ("i" + username);
-        String password_guess = ("i" + password);
+        readUserFile();
+        readPassFile();
+        String  username_guess = ("i" + username),
+                password_guess = ("i" + password);
 
         if (e.getActionCommand().equals("New")) {
             if (logged_in == true) {
@@ -165,6 +166,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                             "Exit Application (Logged Out)?", JOptionPane.YES_NO_OPTION);
                     if (quit_choice == JOptionPane.YES_OPTION){
                         JOptionPane.showMessageDialog(null,"Exiting application without saving.","Exiting Application",JOptionPane.INFORMATION_MESSAGE);
+                        System.exit(0);
                     }
                 }
             }
@@ -367,10 +369,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             }
         } else if (e.getActionCommand().equals("Remove Item")) {
             if (logged_in == true){
-
-
             String searchID = JOptionPane.showInputDialog("Enter the ID of the stock item to be Removed.");
-
             try {
                 int searchIDNum = Integer.parseInt(searchID);
                 for (Stock s : allStock) {
@@ -421,6 +420,8 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                     "Viewing Stock", JOptionPane.INFORMATION_MESSAGE);
         } else if (e.getActionCommand().equals("Login")) {
             if (logged_in == false) {
+                username_guess = "i" + username;
+                password_guess = "i" + password;
                 while ((!username_guess.equals(username) || (!password_guess.equals(password)))) {
                     username_guess = JOptionPane.showInputDialog("Enter the correct username.");
                     while (!username_guess.equals(username)) {
@@ -462,6 +463,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                 }
             }
             username = JOptionPane.showInputDialog("Enter a new username of your choice.");
+            writeUserFile();
 
         } else if (e.getActionCommand().equals("Change Password")) {
             password_guess = ("i" + password);
@@ -472,9 +474,113 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                 }
             }
             password = JOptionPane.showInputDialog("Enter a new password of your choice.");
+            writePassFile();
         }
 
     }
+
+        public void createUserFile () {
+            username_external = "Admin";
+            try {
+                FileOutputStream outUserStream = new FileOutputStream(userFile);
+                byte[] userString = username_external.getBytes();
+                outUserStream.write(userString);
+                outUserStream.close();
+                username = username_external;
+            }
+            catch (IOException ioe) {
+                JOptionPane.showMessageDialog(null,"Failed to create username file.","Username Creation Failure",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        public void createPassFile () {
+            password_external = "Passw";
+            try {
+                FileOutputStream outPassStream = new FileOutputStream(userFile);
+                byte[] passString = password_external.getBytes();
+                outPassStream.write(passString);
+                outPassStream.close();
+                password = password_external;
+            }
+            catch (IOException ioe) {
+                JOptionPane.showMessageDialog(null,"Failed to create password file.","Password Creation Failure",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        public void readUserFile () {
+            if (!userFile.exists()) {
+                createUserFile();
+            }
+            else {
+                username_external = "";
+                try {
+                    FileInputStream inUserStream = new FileInputStream(userFile);
+                    int characters = (int)userFile.length();
+                    byte[] userRead = new byte[characters];
+                    inUserStream.read(userRead);
+                    for (int i = 0; i < characters; i++) {
+                        username_external += userRead[i] + "";
+                    }
+                    username = username_external;
+                    inUserStream.close();
+
+                }
+                catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(null,"Failed to read username from file.","Username Read Failure",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        public void writeUserFile () {
+            if (!userFile.exists()){
+                createUserFile();
+            }
+            else{
+                username_external = username;
+                try {
+                    FileOutputStream outUserStream = new FileOutputStream(userFile);
+                    byte[] userString = username_external.getBytes();
+                    outUserStream.write(userString);
+                    outUserStream.close();
+                }
+                catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(null,"Failed to write username to file.","Username Write Failure",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
+        public void readPassFile () {
+            if (!passFile.exists()) {
+                createPassFile();
+            }
+            else {
+                password_external = "";
+                try {
+                    FileInputStream inPassStream = new FileInputStream(passFile);
+                    int characters = (int)userFile.length();
+                    byte[] passRead = new byte[characters];
+                    inPassStream.read(passRead);
+                    for (int i = 0; i < characters; i++) {
+                        username_external += passRead[i] + "";
+                    }
+                    inPassStream.close();
+
+                }
+                catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(null,"Failed to read password from file.","Password Read Failure",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        public void writePassFile () {
+            password_external = password;
+            try {
+                FileOutputStream outPassStream = new FileOutputStream(passFile);
+                byte[] passString = password_external.getBytes();
+                outPassStream.write(passString);
+                outPassStream.close();
+            }
+            catch (IOException ioe) {
+                JOptionPane.showMessageDialog(null,"Failed to write password to file.","Password Write Failure",JOptionPane.ERROR_MESSAGE);
+            }
+        }
         public void createFile () {
 
             if (!file.exists())
@@ -497,7 +603,6 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                 JOptionPane.showMessageDialog(null, "File to store stock information already exists.",
                         "New File", JOptionPane.WARNING_MESSAGE);
         }
-
         public void openFile () {
 
             ObjectInputStream objectInputStream = null;
@@ -551,7 +656,6 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
 
             }
         }
-
         public void saveFile () {
             if (!file.exists())
                 createFile();
