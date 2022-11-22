@@ -118,8 +118,6 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
     boolean logged_in = false;
     public void actionPerformed(ActionEvent e) {
         int choice;
-        readUserFile();
-        readPassFile();
         String  username_guess = ("i" + username),
                 password_guess = ("i" + password);
 
@@ -419,6 +417,8 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             JOptionPane.showMessageDialog(null, "Viewing stock data",
                     "Viewing Stock", JOptionPane.INFORMATION_MESSAGE);
         } else if (e.getActionCommand().equals("Login")) {
+            readUserFile();
+            readPassFile();
             if (logged_in == false) {
                 username_guess = "i" + username;
                 password_guess = "i" + password;
@@ -455,6 +455,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                 }
             }
         } else if (e.getActionCommand().equals("Change Username")) {
+            readPassFile();
             password_guess = ("i" + password);
             while (!password_guess.equals(password)) {
                 password_guess = JOptionPane.showInputDialog("Enter the current password.");
@@ -466,6 +467,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             writeUserFile();
 
         } else if (e.getActionCommand().equals("Change Password")) {
+            readPassFile();
             password_guess = ("i" + password);
             while (!password_guess.equals(password)) {
                 password_guess = JOptionPane.showInputDialog("Enter the current password.");
