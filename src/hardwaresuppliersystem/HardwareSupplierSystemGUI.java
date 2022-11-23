@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
 
-
 public class HardwareSupplierSystemGUI extends JFrame implements ActionListener {
 
     JMenu fileMenu, stockMenu, accountMenu/*, authentication*/;
@@ -113,13 +112,13 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
     */
     String  username = "",
             password = "",
+            username_guess = "",
+            password_guess = "",
             username_external,
             password_external;
     boolean logged_in = false;
     public void actionPerformed(ActionEvent e) {
         int choice;
-        String  username_guess = ("i" + username),
-                password_guess = ("i" + password);
 
         if (e.getActionCommand().equals("New")) {
             if (logged_in == true) {
@@ -422,6 +421,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             if (logged_in == false) {
                 username_guess = "i" + username;
                 password_guess = "i" + password;
+                System.out.println(username + "  " + password);
                 while ((!username_guess.equals(username) || (!password_guess.equals(password)))) {
                     username_guess = JOptionPane.showInputDialog("Enter the correct username.");
                     while (!username_guess.equals(username)) {
@@ -482,8 +482,8 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
     }
 
         public void createUserFile () {
-            username_external = "Admin";
             try {
+                username_external = "Admin";
                 FileOutputStream outUserStream = new FileOutputStream(userFile);
                 byte[] userString = username_external.getBytes();
                 outUserStream.write(userString);
@@ -496,9 +496,9 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
         }
 
         public void createPassFile () {
-            password_external = "Passw";
             try {
-                FileOutputStream outPassStream = new FileOutputStream(userFile);
+                password_external = "Passw";
+                FileOutputStream outPassStream = new FileOutputStream(passFile);
                 byte[] passString = password_external.getBytes();
                 outPassStream.write(passString);
                 outPassStream.close();
@@ -513,18 +513,19 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                 createUserFile();
             }
             else {
-                username_external = "";
                 try {
+                    username_external = "";
+                    String userString = "";
                     FileInputStream inUserStream = new FileInputStream(userFile);
                     int characters = (int)userFile.length();
                     byte[] userRead = new byte[characters];
                     inUserStream.read(userRead);
                     for (int i = 0; i < characters; i++) {
-                        username_external += userRead[i];
+                        userString += userRead[i];
                     }
-                    username = username_external;
+                    username_external = String.fromCharCode(userString);
                     inUserStream.close();
-
+                    username = username_external;
                 }
                 catch (IOException ioe) {
                     JOptionPane.showMessageDialog(null,"Failed to read username from file.","Username Read Failure",JOptionPane.ERROR_MESSAGE);
@@ -532,20 +533,15 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             }
         }
         public void writeUserFile () {
-            if (!userFile.exists()){
-                createUserFile();
-            }
-            else{
+            try {
                 username_external = username;
-                try {
-                    FileOutputStream outUserStream = new FileOutputStream(userFile);
-                    byte[] userString = username_external.getBytes();
-                    outUserStream.write(userString);
-                    outUserStream.close();
-                }
-                catch (IOException ioe) {
-                    JOptionPane.showMessageDialog(null,"Failed to write username to file.","Username Write Failure",JOptionPane.ERROR_MESSAGE);
-                }
+                FileOutputStream outUserStream = new FileOutputStream(userFile);
+                byte[] userString = username_external.getBytes();
+                outUserStream.write(userString);
+                outUserStream.close();
+            }
+            catch (IOException ioe) {
+                JOptionPane.showMessageDialog(null,"Failed to write username to file.","Username Write Failure",JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -554,17 +550,17 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                 createPassFile();
             }
             else {
-                password_external = "";
                 try {
+                    password_external = "";
                     FileInputStream inPassStream = new FileInputStream(passFile);
-                    int characters = (int)userFile.length();
+                    int characters = (int)passFile.length();
                     byte[] passRead = new byte[characters];
                     inPassStream.read(passRead);
                     for (int i = 0; i < characters; i++) {
-                        username_external += passRead[i];
+                        password_external += passRead[i];
                     }
                     inPassStream.close();
-
+                    password = password_external;
                 }
                 catch (IOException ioe) {
                     JOptionPane.showMessageDialog(null,"Failed to read password from file.","Password Read Failure",JOptionPane.ERROR_MESSAGE);
@@ -572,8 +568,8 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             }
         }
         public void writePassFile () {
-            password_external = password;
             try {
+                password_external = password;
                 FileOutputStream outPassStream = new FileOutputStream(passFile);
                 byte[] passString = password_external.getBytes();
                 outPassStream.write(passString);
