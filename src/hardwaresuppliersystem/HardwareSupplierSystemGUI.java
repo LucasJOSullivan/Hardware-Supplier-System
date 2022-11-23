@@ -447,7 +447,6 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             if (logged_in == false) {
                 username_guess = "i" + username;
                 password_guess = "i" + password;
-                System.out.println(username + "  " + password);
                 while ((!username_guess.equals(username) || (!password_guess.equals(password)))) {
                     username_guess = JOptionPane.showInputDialog("Enter the correct username.");
                     while (!username_guess.equals(username)) {
@@ -510,10 +509,10 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
         public void createUserFile () {
             try {
                 username_external = "Admin";
-                FileOutputStream outUserStream = new FileOutputStream(userFile);
+                FileOutputStream userStream = new FileOutputStream(userFile);
                 byte[] userString = username_external.getBytes();
-                outUserStream.write(userString);
-                outUserStream.close();
+                userStream.write(userString);
+                userStream.close();
                 username = username_external;
             }
             catch (IOException ioe) {
@@ -524,10 +523,10 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
         public void createPassFile () {
             try {
                 password_external = "Passw";
-                FileOutputStream outPassStream = new FileOutputStream(passFile);
+                FileOutputStream passStream = new FileOutputStream(passFile);
                 byte[] passString = password_external.getBytes();
-                outPassStream.write(passString);
-                outPassStream.close();
+                passStream.write(passString);
+                passStream.close();
                 password = password_external;
             }
             catch (IOException ioe) {
@@ -541,17 +540,15 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             else {
                 try {
                     username_external = "";
-                    String userString = "";
-                    FileInputStream inUserStream = new FileInputStream(userFile);
-                    int characters = (int)userFile.length();
-                    byte[] userRead = new byte[characters];
-                    inUserStream.read(userRead);
-                    for (int i = 0; i < characters; i++) {
-                        //userString += userRead[i];
-                        username_external += userRead[i];
+                    //String userString = "";
+                    FileReader userReader = new FileReader(userFile);
+                    int characters;
+                    //String[] userRead = new String[characters];
+                    while ((characters = userReader.read()) != -1) {
+                        username_external += (char)characters;
                     }
                     //username_external = String.fromCharCode(userString);
-                    inUserStream.close();
+                    userReader.close();
                     username = username_external;
                 }
                 catch (IOException ioe) {
@@ -562,10 +559,10 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
         public void writeUserFile () {
             try {
                 username_external = username;
-                FileOutputStream outUserStream = new FileOutputStream(userFile);
+                FileOutputStream userStream = new FileOutputStream(userFile);
                 byte[] userString = username_external.getBytes();
-                outUserStream.write(userString);
-                outUserStream.close();
+                userStream.write(userString);
+                userStream.close();
             }
             catch (IOException ioe) {
                 JOptionPane.showMessageDialog(null,"Failed to write username to file.","Username Write Failure",JOptionPane.ERROR_MESSAGE);
@@ -579,14 +576,12 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             else {
                 try {
                     password_external = "";
-                    FileInputStream inPassStream = new FileInputStream(passFile);
-                    int characters = (int)passFile.length();
-                    byte[] passRead = new byte[characters];
-                    inPassStream.read(passRead);
-                    for (int i = 0; i < characters; i++) {
-                        password_external += passRead[i];
+                    FileReader passReader = new FileReader(passFile);
+                    int characters;
+                    while ((characters = passReader.read()) != -1) {
+                        password_external += (char)characters;
                     }
-                    inPassStream.close();
+                    passReader.close();
                     password = password_external;
                 }
                 catch (IOException ioe) {
@@ -597,10 +592,10 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
         public void writePassFile () {
             try {
                 password_external = password;
-                FileOutputStream outPassStream = new FileOutputStream(passFile);
+                FileOutputStream passStream = new FileOutputStream(passFile);
                 byte[] passString = password_external.getBytes();
-                outPassStream.write(passString);
-                outPassStream.close();
+                passStream.write(passString);
+                passStream.close();
             }
             catch (IOException ioe) {
                 JOptionPane.showMessageDialog(null,"Failed to write password to file.","Password Write Failure",JOptionPane.ERROR_MESSAGE);
@@ -706,13 +701,13 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
     public void autoSaveAddition () {
         if (!file.exists())
             createFile();
-
+        else {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(allStock);
             objectOutputStream.close();
-            JOptionPane.showMessageDialog(null,"Automatically saved new item to file.","Autosaved New Item",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Automatically saved addition of item to file.","Autosaved Addition",JOptionPane.INFORMATION_MESSAGE);
         } catch (FileNotFoundException fnfe) {
             System.out.println(fnfe.getStackTrace());
             JOptionPane.showMessageDialog(null, "File was not found.",
@@ -721,19 +716,20 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             System.out.println(ioe.getStackTrace());
             JOptionPane.showMessageDialog(null, "File was not written.",
                     "File Write Error", JOptionPane.ERROR_MESSAGE);
+        }
         }
     }
 
     public void autoSaveAmendment () {
         if (!file.exists())
             createFile();
-
+        else {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(allStock);
             objectOutputStream.close();
-            JOptionPane.showMessageDialog(null, "Automatically saved amendment to file.", "Autosaved Amendment", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Automatically saved amendment of item to file.", "Autosaved Amendment", JOptionPane.INFORMATION_MESSAGE);
         } catch (FileNotFoundException fnfe) {
             System.out.println(fnfe.getStackTrace());
             JOptionPane.showMessageDialog(null, "File was not found.",
@@ -743,17 +739,18 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             JOptionPane.showMessageDialog(null, "File was not written.",
                     "File Write Error", JOptionPane.ERROR_MESSAGE);
         }
+        }
     }
     public void autoSaveRemoval () {
         if (!file.exists())
             createFile();
-
+        else {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(allStock);
             objectOutputStream.close();
-            JOptionPane.showMessageDialog(null, "Automatically saved item removal from file.", "Autosaved Removal", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Automatically saved removal of item from file.", "Autosaved Removal", JOptionPane.INFORMATION_MESSAGE);
         } catch (FileNotFoundException fnfe) {
             System.out.println(fnfe.getStackTrace());
             JOptionPane.showMessageDialog(null, "File was not found.",
@@ -762,6 +759,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             System.out.println(ioe.getStackTrace());
             JOptionPane.showMessageDialog(null, "File was not written.",
                     "File Write Error", JOptionPane.ERROR_MESSAGE);
+        }
         }
     }
 
