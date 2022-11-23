@@ -57,7 +57,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
 
         fileMenu = new JMenu("File");
 
-        String itemNames[] = {"New", "Open", "Save", "Quit"};
+        String itemNames[] = {"New", "Open", "Save", "Toggle Autosave", "Quit"};
 
         for (int i = 0; i < itemNames.length; i++) {
             item = new JMenuItem(itemNames[i]);
@@ -116,7 +116,8 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             password_guess = "",
             username_external,
             password_external;
-    boolean logged_in = false;
+    boolean logged_in = false,
+            autosave = true;
     public void actionPerformed(ActionEvent e) {
         int choice;
 
@@ -136,7 +137,24 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             else {
                 JOptionPane.showMessageDialog(null,"You are logged out; you must be logged in to save a file.","Login Required",JOptionPane.ERROR_MESSAGE);
             }
-        } else if (e.getActionCommand().equals("Quit")) {
+        }   else if (e.getActionCommand().equals("Toggle Autosave")) {
+            int toggle_choice = -1;
+            if (autosave == true) {
+                toggle_choice = JOptionPane.showConfirmDialog(null,"The autosave function is currently enabled; do you wish to disable it?", "Toggle Autosave (Currently Enabled)?",JOptionPane.YES_NO_OPTION);
+                if (toggle_choice == JOptionPane.YES_OPTION){
+                    autosave = false;
+                    JOptionPane.showMessageDialog(null,"The autosave function has been disabled.","Autosave Disabled", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            else {
+                toggle_choice = JOptionPane.showConfirmDialog(null,"The autosave function is currently disabled; do you wish to enable it?", "Toggle Autosave (Currently Disabled)?",JOptionPane.YES_NO_OPTION);
+                if (toggle_choice == JOptionPane.YES_OPTION) {
+                    autosave = true;
+                    JOptionPane.showMessageDialog(null,"The autosave function has been enabled.","Autosave Enabled", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
+        else if (e.getActionCommand().equals("Quit")) {
             int quit_choice = -1;
             int save_choice = -1;
             while (quit_choice != JOptionPane.NO_OPTION) {
@@ -237,16 +255,15 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                 valueS = JOptionPane.showInputDialog("Enter the price of the new item.");
             }
 
-
             allStock.add(s);
             JOptionPane.showMessageDialog(null, "Stock item created and added to array list!",
                     "New Item Added", JOptionPane.INFORMATION_MESSAGE);
+            if (autosave == true)
+                autoSaveAddition();
             }
             else {
                 JOptionPane.showMessageDialog(null, "You are logged out; you must be logged in to add a stock item.", "Login Required", JOptionPane.ERROR_MESSAGE);
             }
-
-
 
         } else if (e.getActionCommand().equals("Amend Item")) {
             if (logged_in == true) {
@@ -277,9 +294,11 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                                                     "Empty Entry", JOptionPane.ERROR_MESSAGE);
                                             title = JOptionPane.showInputDialog("Enter the title of the new item.");
                                         } else if (title.length() > 0) {
-                                            JOptionPane.showMessageDialog(null, "Title assigned to new item",
+                                            JOptionPane.showMessageDialog(null, "Title assigned to new item.",
                                                     "Title Assigned", JOptionPane.INFORMATION_MESSAGE);
                                             s.setTitle(title);
+                                            if (autosave == true)
+                                                autoSaveAmendment();
                                         }
                                     } else if (amendChoiceI == 2) {
                                         //Referral code
@@ -299,9 +318,11 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                                                     "Invalid Opening Character", JOptionPane.ERROR_MESSAGE);
                                             referralCode = JOptionPane.showInputDialog("Enter the referral code of the new item.");
                                         } else if (referralCode.length() > 1 && (Character.isLetter(chTest))) {
-                                            JOptionPane.showMessageDialog(null, "Referral code assigned to new item",
+                                            JOptionPane.showMessageDialog(null, "Referral code assigned to new item.",
                                                     "Referral Code Assigned", JOptionPane.INFORMATION_MESSAGE);
                                             s.setReferralCode(referralCode);
+                                            if (autosave == true)
+                                                autoSaveAmendment();
                                         }
                                     } else if (amendChoiceI == 3) {
 
@@ -310,9 +331,11 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                                             JOptionPane.showMessageDialog(null, "The type code must contain at least two characters.", "Empty Entry", JOptionPane.ERROR_MESSAGE);
                                             type = JOptionPane.showInputDialog("Enter the type of the new item.");
                                         } else if (type.length() > 0) {
-                                            JOptionPane.showMessageDialog(null, "Type assigned to new item",
+                                            JOptionPane.showMessageDialog(null, "Type assigned to new item.",
                                                     "Adding Stock", JOptionPane.INFORMATION_MESSAGE);
                                             s.setType(type);
+                                            if (autosave == true)
+                                                autoSaveAmendment();
                                         }
                                     } else if (amendChoiceI == 4) {
                                         //Referral code
@@ -324,6 +347,8 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                                             } else if (valueS.length() > 0) {
                                                 double value = Double.parseDouble(valueS);
                                                 s.setValue(value);
+                                                if (autosave == true)
+                                                    autoSaveAmendment();
                                             }
                                         } catch (Exception failValue) {
                                             JOptionPane.showMessageDialog(null, "The value must be translatable to a double (e.g. '0.00,' '11.34,' '275.82' etc.).", "Invalid Entry", JOptionPane.ERROR_MESSAGE);
@@ -378,10 +403,11 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                                 "Confirm Stock Item to Amend", JOptionPane.YES_NO_OPTION);
 
                         if (choice == JOptionPane.YES_OPTION) {
-
                             allStock.remove(s);
                             JOptionPane.showMessageDialog(null, "Item removed from stock list.",
                                     "Product Removed", JOptionPane.INFORMATION_MESSAGE);
+                            if (autosave == true)
+                                autoSaveRemoval();
                         } else {
                             JOptionPane.showMessageDialog(null, "Item removal canceled.",
                                     "Product Not Removed", JOptionPane.INFORMATION_MESSAGE);
@@ -394,7 +420,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                 searchID = JOptionPane.showInputDialog("Enter the ID of the stock to be removed.");
             }
         }
-            else{
+            else {
                 JOptionPane.showMessageDialog(null,"You are logged out; you must be logged in to remove a stock item.","Login Required",JOptionPane.ERROR_MESSAGE);
             }
         } else if (e.getActionCommand().equals("View Items")) {
@@ -521,9 +547,10 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                     byte[] userRead = new byte[characters];
                     inUserStream.read(userRead);
                     for (int i = 0; i < characters; i++) {
-                        userString += userRead[i];
+                        //userString += userRead[i];
+                        username_external += userRead[i];
                     }
-                    username_external = String.fromCharCode(userString);
+                    //username_external = String.fromCharCode(userString);
                     inUserStream.close();
                     username = username_external;
                 }
@@ -675,6 +702,68 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                         "File Write Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+
+    public void autoSaveAddition () {
+        if (!file.exists())
+            createFile();
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(allStock);
+            objectOutputStream.close();
+            JOptionPane.showMessageDialog(null,"Automatically saved new item to file.","Autosaved New Item",JOptionPane.INFORMATION_MESSAGE);
+        } catch (FileNotFoundException fnfe) {
+            System.out.println(fnfe.getStackTrace());
+            JOptionPane.showMessageDialog(null, "File was not found.",
+                    "File Search Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ioe) {
+            System.out.println(ioe.getStackTrace());
+            JOptionPane.showMessageDialog(null, "File was not written.",
+                    "File Write Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void autoSaveAmendment () {
+        if (!file.exists())
+            createFile();
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(allStock);
+            objectOutputStream.close();
+            JOptionPane.showMessageDialog(null, "Automatically saved amendment to file.", "Autosaved Amendment", JOptionPane.INFORMATION_MESSAGE);
+        } catch (FileNotFoundException fnfe) {
+            System.out.println(fnfe.getStackTrace());
+            JOptionPane.showMessageDialog(null, "File was not found.",
+                    "File Search Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ioe) {
+            System.out.println(ioe.getStackTrace());
+            JOptionPane.showMessageDialog(null, "File was not written.",
+                    "File Write Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void autoSaveRemoval () {
+        if (!file.exists())
+            createFile();
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(allStock);
+            objectOutputStream.close();
+            JOptionPane.showMessageDialog(null, "Automatically saved item removal from file.", "Autosaved Removal", JOptionPane.INFORMATION_MESSAGE);
+        } catch (FileNotFoundException fnfe) {
+            System.out.println(fnfe.getStackTrace());
+            JOptionPane.showMessageDialog(null, "File was not found.",
+                    "File Search Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ioe) {
+            System.out.println(ioe.getStackTrace());
+            JOptionPane.showMessageDialog(null, "File was not written.",
+                    "File Write Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
 }
 
