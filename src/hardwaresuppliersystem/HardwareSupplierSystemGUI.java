@@ -210,10 +210,10 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
 
             /*String referralCode = JOptionPane.showInputDialog("Enter the referral code of the new item.");*/
             referralCode = JOptionPane.showInputDialog("Enter the referral code of the new item.");
-            char chTest = referralCode.charAt(1);
+            char chTest = referralCode.charAt(0);
 
             if ((referralCode.length() < 2) && (!Character.isLetter(chTest))) {
-                JOptionPane.showMessageDialog(null, "The referral code must contain at least two characters, and the first character in the reference code must be a letter.",
+                JOptionPane.showMessageDialog(null, "The referral code must contain at least two characters, and the first character in the referral code must be a letter.",
                         "Invalid Entry - Multiple Errors", JOptionPane.ERROR_MESSAGE);
                 referralCode = JOptionPane.showInputDialog("Enter the referral code of the new item.");
             } else if (referralCode.length() < 2) {
@@ -221,7 +221,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                         "Invalid Length of Entry", JOptionPane.ERROR_MESSAGE);
                 referralCode = JOptionPane.showInputDialog("Enter the referral code of the new item.");
             } else if (!Character.isLetter(chTest)) {
-                JOptionPane.showMessageDialog(null, "The first character in the reference code must be a letter.",
+                JOptionPane.showMessageDialog(null, "The first character in the referral code must be a letter.",
                         "Invalid Opening Character", JOptionPane.ERROR_MESSAGE);
                 referralCode = JOptionPane.showInputDialog("Enter the referral code of the new item.");
             } else if (referralCode.length() > 1 && (Character.isLetter(chTest))) {
@@ -303,10 +303,10 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                                     } else if (amendChoiceI == 2) {
                                         //Referral code
                                         String referralCode = JOptionPane.showInputDialog("Enter the referral code of the new item.");
-                                        char chTest = referralCode.charAt(1);
+                                        char chTest = referralCode.charAt(0);
 
                                         if ((referralCode.length() < 2) && (!Character.isLetter(chTest))) {
-                                            JOptionPane.showMessageDialog(null, "The referral code must contain at least two characters, and the first character in the reference code must be a letter.",
+                                            JOptionPane.showMessageDialog(null, "The referral code must contain at least two characters, and the first character in the referral code must be a letter.",
                                                     "Invalid Entry - Multiple Errors", JOptionPane.ERROR_MESSAGE);
                                             referralCode = JOptionPane.showInputDialog("Enter the referral code of the new item.");
                                         } else if (referralCode.length() < 2) {
@@ -314,7 +314,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                                                     "Invalid Length of Entry", JOptionPane.ERROR_MESSAGE);
                                             referralCode = JOptionPane.showInputDialog("Enter the referral code of the new item.");
                                         } else if (!Character.isLetter(chTest)) {
-                                            JOptionPane.showMessageDialog(null, "The first character in the reference code must be a letter.",
+                                            JOptionPane.showMessageDialog(null, "The first character in the referral code must be a letter.",
                                                     "Invalid Opening Character", JOptionPane.ERROR_MESSAGE);
                                             referralCode = JOptionPane.showInputDialog("Enter the referral code of the new item.");
                                         } else if (referralCode.length() > 1 && (Character.isLetter(chTest))) {
@@ -460,7 +460,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                     }
                 }
                 logged_in = true;
-                JOptionPane.showMessageDialog(null,"You have logged in.","Login Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"You have successfully logged in.","Login Success", JOptionPane.INFORMATION_MESSAGE);
 
             } else {
                 JOptionPane.showMessageDialog(null, "You are already logged in.", "Logged In", JOptionPane.INFORMATION_MESSAGE);
@@ -489,7 +489,12 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                 }
             }
             username = JOptionPane.showInputDialog("Enter a new username of your choice.");
-            writeUserFile();
+            if (username != null) {
+                writeUserFile();
+                JOptionPane.showMessageDialog(null, "The username has successfully been changed.", "Username Changed", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+                JOptionPane.showMessageDialog(null, "As the username changing process was canceled, the username has not been changed.", "Username Change Canceled", JOptionPane.INFORMATION_MESSAGE);
 
         } else if (e.getActionCommand().equals("Change Password")) {
             readPassFile();
@@ -501,7 +506,13 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
                 }
             }
             password = JOptionPane.showInputDialog("Enter a new password of your choice.");
-            writePassFile();
+            if (password != null) {
+                writePassFile();
+                JOptionPane.showMessageDialog(null, "The password has successfully been changed.", "Password Changed", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+                JOptionPane.showMessageDialog(null, "As the password changing process was canceled, the password has not been changed.", "Password Change Canceled", JOptionPane.INFORMATION_MESSAGE);
+
         }
 
     }
