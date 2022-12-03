@@ -439,8 +439,6 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
             JOptionPane.showMessageDialog(null, allStockData,
                     "List of stock", JOptionPane.INFORMATION_MESSAGE);
 
-            JOptionPane.showMessageDialog(null, "Viewing stock data",
-                    "Viewing Stock", JOptionPane.INFORMATION_MESSAGE);
         } else if (e.getActionCommand().equals("Login")) {
             readUserFile();
             readPassFile();
