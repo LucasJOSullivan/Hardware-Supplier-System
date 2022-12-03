@@ -517,7 +517,7 @@ public class HardwareSupplierSystemGUI extends JFrame implements ActionListener 
 
         public void createUserFile () {
             try {
-                username_external = "Admin";
+                username_external = "Admi";
                 FileOutputStream userStream = new FileOutputStream(userFile);
                 byte[] userString = username_external.getBytes();
                 userStream.write(userString);
